@@ -23,7 +23,9 @@ const App = () => {
       setUser(user)
       setUsername('')
       setPassword('')
-      await blogService.getAll().then((blogs) => setBlogs(blogs))
+      const allBlogs = await blogService.getAll()
+      const filteredBlogsByUser = allBlogs.filter((blog) => blog.user !== undefined && blog.user.username === user.username)
+      setBlogs(filteredBlogsByUser)
     } catch (exception) {
       setErrorMessage('Wrong credentials')
       setTimeout(() => {
@@ -60,8 +62,6 @@ const App = () => {
     return (
       <div>
         <p>{user.name} logged-in</p>
-        <p>{user.blogs.length}</p>
-        <br />
         {blogs.map((blog) => (
           <Blog key={blog.id} blog={blog} />
         ))}
