@@ -10,9 +10,12 @@ const App = () => {
   const [password, setPassword] = useState('')
   const [errorMessage, setErrorMessage] = useState(null)
   const [user, setUser] = useState(null)
+  const [title, setTitle] = useState('')
+  const [author, setAuthor] = useState('')
+  const [url, setUrl] = useState('')
 
   useEffect(() => {
-    console.log("logged")
+    console.log('logged')
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
@@ -22,15 +25,12 @@ const App = () => {
   }, [])
 
   useEffect(() => {
-    blogService
-      .getAll()
-      .then(initialBlogs => {
-        setBlogs(initialBlogs)
-      })
+    blogService.getAll().then((initialBlogs) => {
+      setBlogs(initialBlogs)
+    })
   }, [])
 
   const handleLogin = async (event) => {
-    console.log("first log")
     event.preventDefault()
     try {
       const userData = await loginService.login({
@@ -83,10 +83,82 @@ const App = () => {
   const userBlogs = () => {
     return (
       <div>
-        <p>{user.name} logged-in<button onClick={logoutUser}>logout</button></p>
+        <p>
+          {user.name} logged-in<button onClick={logoutUser}>logout</button>
+        </p>
+        {newBlogForm()}
         {blogs.map((blog) => (
           <Blog key={blog.id} blog={blog} />
         ))}
+      </div>
+    )
+  }
+
+  const handleNewBlog = async (event) => {
+    event.preventDefault()
+
+    try {
+      const newBlog = {
+        title,
+        author,
+        url,
+      }
+
+      const response = await blogService.create(newBlog)
+      if (response.status === (20)[0 - 9]) {
+        const message = 'a new blog ' + title + ' by ' + author + ' added'
+        setErrorMessage(message)
+      } else {
+        setErrorMessage('something went wrong')
+      }
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+      setTitle('')
+      setAuthor('')
+      setUrl('')
+    } catch (error) {
+      setErrorMessage('All fields should be filled')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+    }
+  }
+
+  const newBlogForm = () => {
+    return (
+      <div>
+        <h2>create new</h2>
+        <form onSubmit={handleNewBlog}>
+          <div>
+            title:
+            <input
+              type="text"
+              onChange={({ target }) => setTitle(target.value)}
+              value={title}
+              name="title"
+            ></input>
+          </div>
+          <div>
+            author:
+            <input
+              type="text"
+              onChange={({ target }) => setAuthor(target.value)}
+              value={author}
+              name="author"
+            ></input>
+          </div>
+          <div>
+            url:
+            <input
+              type="text"
+              onChange={({ target }) => setUrl(target.value)}
+              value={url}
+              name="url"
+            ></input>
+          </div>
+          <button type="submit">create</button>
+        </form>
       </div>
     )
   }

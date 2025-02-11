@@ -11,7 +11,7 @@ blogsRouter.post('/', async (request, response) => {
   const body = request.body
   const user = request.user
 
-  if (!body.title || !body.url || !user) {
+  if (!body.title || !body.author || !body.url || !user) {
     return response.status(400).json({ error: 'malformed request' })
   } else if (!body.likes) {
     body.likes = 0
