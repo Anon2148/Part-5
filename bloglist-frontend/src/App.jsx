@@ -15,7 +15,6 @@ const App = () => {
   const blogFormRef = useRef()
 
   useEffect(() => {
-    console.log('logged')
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
