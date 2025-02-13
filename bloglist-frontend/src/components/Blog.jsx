@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-const Blog = ({ blog, addLike }) => {
+const Blog = ({ blog, addLike, removeBlog }) => {
   const [blogVisible, setBlogVisible] = useState(false)
   const blogStyle = {
     paddingTop: 10,
@@ -29,7 +29,12 @@ const Blog = ({ blog, addLike }) => {
     )
   }
 
-  const remove = () => {}
+  const remove = () => {
+    if (
+      window.confirm('Remove blog ' + blog.title + ' by ' + blog.author + '?')
+    )
+      removeBlog(blog)
+  }
 
   return (
     <div style={blogStyle}>
