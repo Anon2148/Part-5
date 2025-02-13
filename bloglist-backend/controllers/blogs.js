@@ -50,15 +50,16 @@ blogsRouter.put('/:id', async (request, response) => {
   const body = request.body
   const user = request.user
 
-  if (!body.title || !body.url || !user) {
+  if (!body.title || !body.url || !body.author || !user) {
     return response.status(400).json({ error: 'malformed request' })
   }
 
   const blog = {
     title: body.title,
-    author: body.author,
     url: body.url,
+    author: body.author,
     likes: body.likes || 0,
+    user: user.id,
   }
   await Blog.findByIdAndUpdate(request.params.id, blog, { new: true })
   response.status(204).end()

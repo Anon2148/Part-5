@@ -89,10 +89,32 @@ const App = () => {
           <NewBlogForm createBlog={createBlog} />
         </Togglable>
         {blogs.map((blog) => (
-          <Blog key={blog.id} blog={blog} />
+          <Blog key={blog.id} blog={blog} addLike={addLike} />
         ))}
       </div>
     )
+  }
+
+  const addLike = (blogObject, id) => {
+    const response = blogService.update(id, blogObject)
+    const updatedBlogs = blogs.map((blog) =>
+      blog.id === id ? { ...blog, likes: blogObject.likes } : blog
+    )
+    setBlogs(updatedBlogs)
+    if (response.status === (20)[0 - 9]) {
+      const message =
+        'the blog ' +
+        blogObject.title +
+        ' by ' +
+        blogObject.author +
+        ' was updated'
+      setErrorMessage(message)
+    } else {
+      setErrorMessage('something went wrong')
+    }
+    setTimeout(() => {
+      setErrorMessage(null)
+    }, 5000)
   }
 
   const createBlog = (blogObject) => {
