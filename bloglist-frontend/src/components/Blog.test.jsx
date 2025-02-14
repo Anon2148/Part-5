@@ -1,8 +1,10 @@
 import { render, screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import Blog from './Blog'
 import { expect } from 'vitest'
 
-test('initial renders show only blog`s title and blog`s author', () => {
+describe('<Blog />', () => {
+  let container
   const blog = {
     title: 'new blog',
     author: 'author',
@@ -11,13 +13,27 @@ test('initial renders show only blog`s title and blog`s author', () => {
     user: { username: 'root' },
   }
 
-  const container = render(<Blog blog={blog} />).container
+  beforeEach(() => {
+    container = render(<Blog blog={blog} />).container
+  })
 
-  const title = screen.findByText('new blog')
-  const author = screen.findByText('author')
-  const hiddenDiv = container.querySelector('.hiddenInfo')
+  test('at start only blog`s title and blog`s author are displayed', async () => {
+    const title = screen.findByText('new blog')
+    const author = screen.findByText('author')
+    const hiddenDiv = container.querySelector('.hiddenInfo')
 
-  expect(title).toBeDefined()
-  expect(author).toBeDefined()
-  expect(hiddenDiv).toHaveStyle('display: none')
+    expect(title).toBeDefined()
+    expect(author).toBeDefined()
+    expect(hiddenDiv).toHaveStyle('display: none')
+  })
+
+  test('hidden content is displayed after pressing the button controlling', async () => {
+    const user = userEvent.setup()
+    const button = screen.getByText('view')
+    const hiddenDiv = container.querySelector('.hiddenInfo')
+    await user.click(button)
+    expect(hiddenDiv).not.toHaveStyle('display: none')
+  })
 })
+
+test
