@@ -46,7 +46,7 @@ const Blog = ({ blog, addLike, removeBlog }) => {
           </button>
         </p>
       </div>
-      <div style={showWhenVisible}>
+      <div style={showWhenVisible} className="hiddenInfo">
         <p>{blog.url}</p>
         <p>
           likes{' ' + blog.likes} <button onClick={like}>like</button>
