@@ -12,4 +12,9 @@ const createBlog = async (page, title, author, url) => {
   await page.getByRole('button', { name: 'create' }).click()
 }
 
-export { loginWith, createBlog }
+const likeBlog = async (page, title) => {
+  await page.getByRole('button', { name: 'view' }).click()
+  await page.getByTestId('like-' + title).click()
+}
+
+export { loginWith, createBlog, likeBlog }

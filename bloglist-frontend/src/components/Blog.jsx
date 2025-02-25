@@ -49,7 +49,10 @@ const Blog = ({ blog, addLike, removeBlog }) => {
       <div style={showWhenVisible} className="hiddenInfo">
         <p>{blog.url}</p>
         <p>
-          likes{' ' + blog.likes} <button onClick={like}>like</button>
+          likes{' ' + blog.likes}{' '}
+          <button data-testid={'like-' + blog.title} onClick={like}>
+            like
+          </button>
         </p>
         <p>{blog.user.username}</p>
         <button onClick={remove}>remove</button>
