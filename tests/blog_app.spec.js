@@ -59,6 +59,22 @@ describe('Blog app', () => {
 
         await expect(page.getByText('likes 1')).toBeVisible()
       })
+
+      test('a blog can be deleted by its owner', async ({ page }) => {
+        await page.getByRole('button', { name: 'view' }).click()
+        await page.getByRole('button', { name: 'remove' }).click()
+        page.on('dialog', async (dialog) => {
+          expect(dialog.message()).toEqual(
+            'Remove blog blogTitle by test author?'
+          )
+          console.log(dialog.message())
+          await dialog.accept()
+        })
+
+        await expect(
+          page.getByText('the blog testTitle by test author was removed')
+        ).toBeVisible()
+      })
     })
   })
 })
